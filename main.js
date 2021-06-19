@@ -8,8 +8,9 @@ const ctx = canvas.getContext("2d");
 // game
 let gameIsRunning = true;
 
-const fps = 15;
+let fps = 5;
 let tileSize = 30;
+let tileSizeForCircle = tileSize / 2;
 const tileCountX = canvas.width / tileSize;
 const tileCountY = canvas.height / tileSize;
 
@@ -32,8 +33,8 @@ let foodPosY = 0;
 
 // loop
 const gameLoop = () => {
-  drawStuff();
   if (gameIsRunning) {
+    drawStuff();
     moveStuff();
     setTimeout(gameLoop, 1000 / fps); 
   };
@@ -78,6 +79,7 @@ const moveStuff = () => {
   if (snakePosX === foodPosX && snakePosY === foodPosY) {
     title.textContent = ++score;
     snakeLength++;
+    {fps === 25 ? '' : fps = fps + 1};
     resetFood()
   };
 
@@ -100,7 +102,7 @@ const drawStuff = () => {
     rectangle('#c1274d', snakePart.x, snakePart.y, tileSize, tileSize)
   );
   
-  // snake
+  // snake head
   rectangle('#DA0037', snakePosX, snakePosY, tileSize, tileSize);
 
 };
@@ -122,8 +124,8 @@ const drawGrid = () => {
       '#444444',
       tileSize * i,
       tileSize * j,
-      tileSize - 1,
-      tileSize - 1)
+      tileSize,
+      tileSize)
     };
   };
 
@@ -198,6 +200,7 @@ const keyPush = (event) => {
       }
       break;
   };
+
 };
 
 // listeners
