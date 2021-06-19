@@ -5,13 +5,6 @@ body {
   text-align: center;
 }
 
-.canvas-container {
-  position: relative;
-  max-width: 1024px;
-  min-width: 320px;
-  margin: 0 auto;
-}
-
 canvas {
   border: 10px solid #EDEDED;
 }
@@ -28,4 +21,11 @@ h1 {
 h1 strong {
   font-size: 1.35em;
   display: inline-block;
+}
+
+@media screen and (max-width: 800) {
+  canvas {
+    width: 100%;
+    height: auto;
+  }
 }
