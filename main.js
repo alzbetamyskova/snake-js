@@ -27,6 +27,10 @@ let velocityY = 0;
 let tail = [];
 let snakeLength = 2;
 
+// player mobile
+let xDown = null;
+let yDown = null;
+
 // food
 let foodPosX = 0;
 let foodPosY = 0;
@@ -42,6 +46,62 @@ const gameLoop = () => {
     moveStuff();
     setTimeout(gameLoop, 1000 / fps); 
   };
+};
+
+// mobile snake
+
+const handleTouchStart = (event) => {
+  xDown = event.touches[0].clientX;
+  yDown = event.touches[0].clientY;
+};
+
+const handleTouchMove = (event) => {
+  if (!xDown || !yDown) {
+    return;
+  };
+
+  let xUp = event.touches[0].clientX;
+  let yUp = event.touches[0].clientY;
+  let xDiff = xDown - xUp;
+  let yDiff = yDown - yUp;
+
+  if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    // most significant
+    if (xDiff > 0) {
+      // left swipe
+      if (velocityX !== 1) {
+        velocityX = -1;
+        velocityY = 0;
+      }
+    } else {
+      // right swipe
+      if (velocityX !== -1) {
+        velocityX = 1;
+        velocityY = 0;
+      }
+    }
+  } else {
+    if (yDiff > 0) {
+      // up swipe
+      if (velocityY !== 1) {
+        velocityX = 0;
+        velocityY = -1;
+      }
+    } else {
+      //  down swipe
+      if (velocityY !== -1) {
+        velocityX = 0;
+        velocityY = 1;
+      }
+    }
+  };
+
+  // reset values
+  xDown = null;
+  yDown = null;
+
+  // restart game
+  if (!gameIsRunning) location.reload();
 };
 
 // functions
@@ -241,6 +301,8 @@ const keyPush = (event) => {
 
 // listeners
 document.addEventListener('keydown', keyPush);
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
 
 resetFood();
 gameLoop();
