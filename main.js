@@ -31,6 +31,10 @@ let snakeLength = 1;
 let foodPosX = 0;
 let foodPosY = 0;
 
+// audio
+const audioBlop = new Audio('./assets/Blop.mp3');
+const audioTrombone = new Audio('./assets/Trombone.mp3');
+
 // loop
 const gameLoop = () => {
   if (gameIsRunning) {
@@ -77,6 +81,7 @@ const moveStuff = () => {
 
   // food colision
   if (snakePosX === foodPosX && snakePosY === foodPosY) {
+    audioBlop.play();
     title.textContent = ++score;
     snakeLength++;
     {fps === 25 ? '' : fps = fps + 1};
@@ -157,6 +162,7 @@ const resetFood = () => {
 
 // game over
 const gameOver = () => {
+  audioTrombone.play();
   title.innerHTML = `Prohrál si s ${score} body.`;
   gameIsRunning = false;
 };
