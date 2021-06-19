@@ -7,26 +7,28 @@ const canvas = document.querySelector('canvas');
 const title = document.querySelector('h1');
 const ctx = canvas.getContext("2d");
 
-// player
-let snakeSize = 30;
+// game
+let tileSize = 30;
+let score = 0;
+const fps = 15;
 
-let snakeSpeed = snakeSize;
+const tileCountX = canvas.width / tileSize;
+const tileCountY = canvas.height / tileSize;
+
+// player
+let snakeSpeed = tileSize;
 let snakePosX = 0;
 let snakePosY = canvas.height / 2;
 
 let velocityX = 0;
 let velocityY = 0;
 
+let tail = []
+let snakeLength = 1;
+
 // food
 let foodPosX = 0;
 let foodPosY = 0;
-
-// game
-let score = 0;
-const fps = 15;
-
-const tileCountX = canvas.width / snakeSize;
-const tileCountY = canvas.height / snakeSize;
 
 // loop
 const gameLoop = () => {
@@ -46,22 +48,29 @@ const moveStuff = () => {
   snakePosY += snakeSpeed * velocityY;
 
   // wall colision
-  if (snakePosX > canvas.width - snakeSize) {
+  if (snakePosX > canvas.width - tileSize) {
     snakePosX = 0;
   };
   if (snakePosX < 0) {
     snakePosX = canvas.width;
   };
-  if (snakePosY > canvas.height - snakeSize) {
+  if (snakePosY > canvas.height - tileSize) {
     snakePosY = 0;
   };
   if (snakePosY < 0) {
     snakePosY = canvas.height;
   };
 
+  // tail
+  tail.push({x: snakePosX, y: snakePosY});
+
+  // forget earliest parts of snake
+  tail = tail.slice(-1 * snakeLength);
+
   // food colision
   if (snakePosX === foodPosX && snakePosY === foodPosY) {
     title.textContent = ++score;
+    snakeLength++;
     resetFood()
   };
 
@@ -70,13 +79,22 @@ const moveStuff = () => {
 // ** DRAW EVERYTHING
 const drawStuff = () => {
 
+  // background
   rectangle('#EDEDED', 0, 0, canvas.width, canvas.height);
 
+  // grid
   drawGrid()
 
-  rectangle('#a4da00', foodPosX, foodPosY, snakeSize, snakeSize)
+  // food
+  rectangle('#a4da00', foodPosX, foodPosY, tileSize, tileSize)
+
+  // tail
+  tail.forEach((snakePart) => 
+    rectangle('#c1274d', snakePart.x, snakePart.y, tileSize, tileSize)
+  );
   
-  rectangle('#DA0037', snakePosX, snakePosY, snakeSize, snakeSize);
+  // snake
+  rectangle('#DA0037', snakePosX, snakePosY, tileSize, tileSize);
 
 };
 
@@ -95,10 +113,10 @@ const drawGrid = () => {
     for (let j = 0; j < tileCountY; j ++) {
     rectangle(
       '#444444',
-      snakeSize * i,
-      snakeSize * j,
-      snakeSize - 1,
-      snakeSize - 1)
+      tileSize * i,
+      tileSize * j,
+      tileSize - 1,
+      tileSize - 1)
     };
   };
 
@@ -106,8 +124,8 @@ const drawGrid = () => {
 
 // reset food
 const resetFood = () => {
-  foodPosX = Math.floor(Math.random() * tileCountX) * snakeSize;
-  foodPosY = Math.floor(Math.random() * tileCountY) * snakeSize;
+  foodPosX = Math.floor(Math.random() * tileCountX) * tileSize;
+  foodPosY = Math.floor(Math.random() * tileCountY) * tileSize;
 };
 
 // ** KEYBOARD
