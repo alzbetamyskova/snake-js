@@ -1,18 +1,19 @@
 *, :after, :before { box-sizing: border-box; }
 
 body {
-  background: #ffbf00;
+  background: #444444;
   text-align: center;
 }
 
 canvas {
-  border: 10px solid #f7347a;
+  border: 10px solid #EDEDED;
 }
 
 h1 {
+  color: #EDEDED;
   margin-top: 0;
   font-size: 4em;
-  font-family: "Avenir Next", Verdana;
+  font-family: Verdana;
   font-weight: bold;
   letter-spacing: -10px;
 }
