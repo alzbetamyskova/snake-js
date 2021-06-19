@@ -1,29 +1,29 @@
 'use strict';
 
-console.log('Funguju!');
-
 // canvas
 const canvas = document.querySelector('canvas');
 const title = document.querySelector('h1');
 const ctx = canvas.getContext("2d");
 
 // game
-let tileSize = 30;
-let score = 0;
-const fps = 15;
+let gameIsRunning = true;
 
+const fps = 15;
+let tileSize = 30;
 const tileCountX = canvas.width / tileSize;
 const tileCountY = canvas.height / tileSize;
+
+let score = 0;
 
 // player
 let snakeSpeed = tileSize;
 let snakePosX = 0;
 let snakePosY = canvas.height / 2;
 
-let velocityX = 0;
+let velocityX = 1;
 let velocityY = 0;
 
-let tail = []
+let tail = [];
 let snakeLength = 1;
 
 // food
@@ -32,11 +32,11 @@ let foodPosY = 0;
 
 // loop
 const gameLoop = () => {
-
   drawStuff();
-  moveStuff();
-  setTimeout(gameLoop, 1000 / fps); 
-
+  if (gameIsRunning) {
+    moveStuff();
+    setTimeout(gameLoop, 1000 / fps); 
+  };
 };
 
 // functions
@@ -60,6 +60,13 @@ const moveStuff = () => {
   if (snakePosY < 0) {
     snakePosY = canvas.height;
   };
+
+  // GAME OVER - tail colision
+  tail.forEach((snakePart) => {
+    if (snakePosX === snakePart.x && snakePosY === snakePart.y) {
+      gameOver();
+    };
+  });
 
   // tail
   tail.push({x: snakePosX, y: snakePosY});
@@ -124,8 +131,32 @@ const drawGrid = () => {
 
 // reset food
 const resetFood = () => {
+
+  // GAME OVER - nowhere to go
+  if (snakeLength === tileCountX * tileCountY) {
+    gameOver();
+  };
+
   foodPosX = Math.floor(Math.random() * tileCountX) * tileSize;
   foodPosY = Math.floor(Math.random() * tileCountY) * tileSize;
+
+  // dont spawn food on snakes head
+  if (foodPosX === snakePosX && foodPosY === snakePosY) {
+    resetFood();
+  };
+
+  // dont spawn food on any snake part
+  if (
+    tail.some((snakePart) => snakePart.x === foodPosX && snakePart.y === foodPosY)) {
+    resetFood();
+  };
+
+};
+
+// game over
+const gameOver = () => {
+  title.innerHTML = `Prohrál si s ${score} body.`;
+  gameIsRunning = false;
 };
 
 // ** KEYBOARD
@@ -157,6 +188,13 @@ const keyPush = (event) => {
       if (velocityY !== -1) {
         velocityX = 0;
         velocityY = 1;
+      }
+      break;
+
+    default:
+      // restart game
+      if (!gameIsRunning) {
+        location.reload()
       }
       break;
   };
