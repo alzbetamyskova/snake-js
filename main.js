@@ -25,7 +25,7 @@ let velocityX = 1;
 let velocityY = 0;
 
 let tail = [];
-let snakeLength = 1;
+let snakeLength = 2;
 
 // food
 let foodPosX = 0;
@@ -100,15 +100,33 @@ const drawStuff = () => {
   drawGrid()
 
   // food
-  rectangle('#a4da00', foodPosX, foodPosY, tileSize, tileSize)
+  // rectangle('#a4da00', foodPosX, foodPosY, tileSize, tileSize)
+  circle(
+    '#a4da00',
+    foodPosX + tileSizeForCircle,
+    foodPosY + tileSizeForCircle,
+    tileSizeForCircle
+    );
 
   // tail
   tail.forEach((snakePart) => 
-    rectangle('#c1274d', snakePart.x, snakePart.y, tileSize, tileSize)
+    // rectangle('#c1274d', snakePart.x, snakePart.y, tileSize, tileSize)
+    circle(
+      '#c1274d',
+      snakePart.x + tileSizeForCircle,
+      snakePart.y + tileSizeForCircle,
+      tileSizeForCircle
+      )
   );
   
   // snake head
-  rectangle('#DA0037', snakePosX, snakePosY, tileSize, tileSize);
+  // rectangle('#DA0037', snakePosX, snakePosY, tileSize, tileSize);
+  circle(
+    '#DA0037',
+    snakePosX + tileSizeForCircle,
+    snakePosY + tileSizeForCircle,
+    tileSizeForCircle
+    );
 
 };
 
@@ -119,6 +137,14 @@ const rectangle = (color, x, y, width, height) => {
   ctx.fillRect(x, y, width, height);
 
 };
+
+// draw circle
+const circle = (color, x, y, radius) => {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2 * Math.PI);
+  ctx.fill();
+}
 
 // draw grid
 const drawGrid = () => {
@@ -172,6 +198,7 @@ const keyPush = (event) => {
 
   switch (event.key) {
     case 'ArrowLeft':
+    case 'a':
       if (velocityX !== 1) {
         velocityX = -1;
         velocityY = 0;
@@ -179,6 +206,7 @@ const keyPush = (event) => {
       break;
 
     case 'ArrowUp':
+    case 'w':
       if (velocityY !== 1) {
         velocityX = 0;
         velocityY = -1;
@@ -186,6 +214,7 @@ const keyPush = (event) => {
       break;
 
     case 'ArrowRight':
+    case 'd': 
       if (velocityX !== -1) {
         velocityX = 1;
         velocityY = 0;
@@ -193,6 +222,7 @@ const keyPush = (event) => {
       break;
           
     case 'ArrowDown':
+    case 's':
       if (velocityY !== -1) {
         velocityX = 0;
         velocityY = 1;
