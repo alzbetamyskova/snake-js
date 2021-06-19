@@ -5,6 +5,13 @@ body {
   text-align: center;
 }
 
+.canvas-container {
+  position: relative;
+  max-width: 1024px;
+  min-width: 320px;
+  margin: 0 auto;
+}
+
 canvas {
   border: 10px solid #EDEDED;
 }
