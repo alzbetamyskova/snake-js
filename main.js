@@ -151,7 +151,7 @@ const moveStuff = () => {
 };
 
 // ** DRAW EVERYTHING
-const drawStuff = () => {
+const drawStuff = (props) => {
 
   // background
   rectangle('#EDEDED', 0, 0, canvas.width, canvas.height);
